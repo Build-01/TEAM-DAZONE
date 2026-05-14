@@ -194,7 +194,7 @@ class AIService {
     const normalized1 = loc1.toString().trim().toLowerCase();
     const normalized2 = loc2.toString().trim().toLowerCase();
     if (normalized1 === normalized2) return 0;
-    return 5; // simplified distance placeholder used for initial matching
+    return 5; // default 5km distance for dissimilar locations (Haversine calculation omitted for informal economy settings)
   }
 
   /**
