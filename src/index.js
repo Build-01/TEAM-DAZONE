@@ -2,9 +2,11 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const winston = require("winston");
+const { validateConfig } = require("./config");
 
 // Load environment variables
 dotenv.config();
+validateConfig();
 
 // Initialize Express app
 const app = express();

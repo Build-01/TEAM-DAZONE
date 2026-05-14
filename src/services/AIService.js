@@ -105,21 +105,20 @@ class AIService {
    */
   async matchWorkerToGig(worker, gig) {
     try {
+      const workerSkills =
+        (worker.skills && worker.skills.length ? worker.skills : worker.workerProfile?.skills) || [];
+      const workerLocation = worker.location || worker.workerProfile?.location || "";
+      const workerLanguage = worker.preferredLanguage || "en";
+
       // 1. Skills Matching (0-100)
-      const skillMatch = this.calculateSkillMatch(
-        worker.skills || [],
-        gig.requiredSkills || []
-      );
+      const skillMatch = this.calculateSkillMatch(workerSkills, gig.requiredSkills || []);
 
       // 2. Location Proximity (0-100, max 100 for same location)
-      const locationDistance = this.calculateLocationDistance(
-        worker.location,
-        gig.location
-      );
+      const locationDistance = this.calculateLocationDistance(workerLocation, gig.location);
       const locationMatch = Math.max(0, 100 - locationDistance * 2);
 
       // 3. Language Compatibility (0-100)
-      const languageMatch = worker.preferredLanguage === gig.language ? 100 : 75;
+      const languageMatch = workerLanguage === (gig.language || "en") ? 100 : 75;
 
       // 4. Trust Score (already 0-100)
       const trustMatch = worker.economicIdentityScore || 0;
@@ -191,9 +190,11 @@ class AIService {
    * Calculate Location Distance (simplified - in production use Haversine)
    */
   calculateLocationDistance(loc1, loc2) {
-    // Placeholder - in production, use actual coordinates
-    if (loc1.toLowerCase() === loc2.toLowerCase()) return 0;
-    return 5; // km (default)
+    if (!loc1 || !loc2) return 10;
+    const normalized1 = loc1.toString().trim().toLowerCase();
+    const normalized2 = loc2.toString().trim().toLowerCase();
+    if (normalized1 === normalized2) return 0;
+    return 5; // km (default placeholder)
   }
 
   /**
@@ -309,14 +310,14 @@ class AIService {
     const consistencyRatio = (contributionCount / expectedContributions) * 100;
 
     // Standard deviation of contributions
-    const avgContribution = totalContributions / contributionCount;
+    const avgContribution = contributionCount > 0 ? totalContributions / contributionCount : 0;
+    const months = monthlyContributions.length || contributionCount || 1;
     const variance =
-      monthlyContributions.reduce((sum, c) => sum + Math.pow(c - avgContribution, 2), 0) /
-      monthlyContributions.length;
+      monthlyContributions.reduce((sum, c) => sum + Math.pow(c - avgContribution, 2), 0) / months;
     const stdDev = Math.sqrt(variance);
-    const stability = Math.max(0, 100 - (stdDev / avgContribution) * 100);
+    const stability = avgContribution > 0 ? Math.max(0, 100 - (stdDev / avgContribution) * 100) : 50;
 
-    return (consistencyRatio + stability) / 2;
+    return Math.min(100, Math.max(0, (consistencyRatio + stability) / 2));
   }
 
   /**

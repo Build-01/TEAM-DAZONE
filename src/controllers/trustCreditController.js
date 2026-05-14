@@ -266,7 +266,7 @@ const getTrustCredentials = async (req, res) => {
     const { userId } = req.params;
 
     // Verify user is requesting own or has permission
-    if (req.user.userId !== userId && req.user.role !== "ADMIN") {
+    if (req.user.userId !== userId) {
       return res.status(403).json({
         success: false,
         message: "Access denied",

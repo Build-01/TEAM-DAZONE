@@ -4,11 +4,17 @@ const bcrypt = require("bcryptjs");
 /**
  * Generate JWT Token
  */
-const generateToken = (userId, email, expiresIn = process.env.JWT_EXPIRY || "7d") => {
+const generateToken = (
+  userId,
+  email,
+  userType = "WORKER",
+  expiresIn = process.env.JWT_EXPIRY || "7d"
+) => {
   return jwt.sign(
     {
       userId,
       email,
+      userType,
       iat: Math.floor(Date.now() / 1000),
     },
     process.env.JWT_SECRET,

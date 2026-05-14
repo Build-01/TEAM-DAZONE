@@ -48,11 +48,15 @@ const getPensionAccount = async (req, res) => {
  * Calculate Projected Retirement Income
  */
 const calculateProjectedRetirementIncome = async (pensionAccount) => {
-  const { totalContributions, contributionCount, projectededAge } = pensionAccount;
+  const { totalContributions, contributionCount, projectedRetirementAge } = pensionAccount;
   const avgContribution = contributionCount > 0 ? totalContributions / contributionCount : 0;
-  const yearsToRetirement = Math.max(0, 65 - (new Date().getFullYear() % 100));
+  const assumedYearsToRetirement = 25; // conservative estimate for informal workers when DOB is unavailable
 
-  return Math.round(avgContribution * 12 * yearsToRetirement * 1.05); // 5% growth
+  if (projectedRetirementAge) {
+    return Math.round(avgContribution * 12 * Math.max(1, assumedYearsToRetirement) * 1.05);
+  }
+
+  return Math.round(avgContribution * 12 * assumedYearsToRetirement * 1.05);
 };
 
 /**
@@ -244,6 +248,14 @@ const releaseGigPaymentWithPension = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: "Escrow not initiated for this gig",
+      });
+    }
+
+    const worker = await prisma.user.findUnique({ where: { id: workerUserId } });
+    if (!worker) {
+      return res.status(404).json({
+        success: false,
+        message: "Worker not found",
       });
     }
 

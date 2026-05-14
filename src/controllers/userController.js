@@ -107,7 +107,7 @@ const registerUser = async (req, res) => {
     });
 
     // Generate token
-    const token = generateToken(user.id, user.email);
+    const token = generateToken(user.id, user.email, user.userType);
 
     res.status(201).json({
       success: true,
@@ -165,7 +165,7 @@ const loginUser = async (req, res) => {
       });
     }
 
-    const token = generateToken(user.id, user.email);
+    const token = generateToken(user.id, user.email, user.userType);
 
     // Update last active
     await prisma.user.update({
