@@ -8,3 +8,5 @@
 {"level":"info","message":"Server is running on port 3000 in development mode"}
 {"level":"info","message":"GET /"}
 {"level":"info","message":"GET /favicon.ico"}
+{"level":"info","message":"GET /health"}
+{"level":"info","message":"GET /favicon.ico"}
