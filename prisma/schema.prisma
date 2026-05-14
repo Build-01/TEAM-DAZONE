@@ -53,7 +53,7 @@ model User {
   transactions          Transaction[]
   pensionAccount        PensionAccount?
   savingsWallet         SavingsWallet?
-  trustCredits          TrustCredit[]
+  trustCredit           TrustCredit?
   reviews               Review[]
   communityEndorsements CommunityEndorsement[]
   
@@ -151,6 +151,8 @@ model Gig {
   duration              Int      // in hours or days
   startDate             DateTime
   endDate               DateTime?
+  
+  language              String   @default("en")
   
   // Gig Status
   status                GigStatus @default(OPEN)
@@ -360,7 +362,7 @@ model SavingsWallet {
 
 model TrustCredit {
   id                    String   @id @default(cuid())
-  userId                String
+  userId                String   @unique
   user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   
   // Trust Signals
