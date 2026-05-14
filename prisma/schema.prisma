@@ -1,0 +1,467 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                    String   @id @default(cuid())
+  email                 String   @unique
+  phone                 String   @unique
+  passwordHash          String
+  firstName             String
+  lastName              String
+  profilePhoto          String?
+  voiceIntroduction     String?
+  preferredLanguage     String   @default("en")
+  location              String
+  locationCoordinates   String?  // JSON: {lat, lng}
+  
+  // Economic Identity
+  economicIdentityScore Float    @default(0)
+  trustScore            Float    @default(0)
+  pensionScore          Float    @default(0)
+  communityTrustScore   Float    @default(0)
+  
+  // User Type
+  userType              UserType @default(WORKER) // WORKER, TRADER, EMPLOYER
+  
+  // Worker Profile
+  workerProfile         WorkerProfile?
+  
+  // Trader Profile
+  traderProfile         TraderProfile?
+  
+  // Financial Info
+  bankName              String?
+  accountNumber         String?
+  bvn                   String?   // Bank Verification Number
+  verified              Boolean   @default(false)
+  verificationDate      DateTime?
+  communityVerified     Boolean   @default(false)
+  communityVerifiers    String[]  // JSON array of verifier IDs
+  
+  // Relationships
+  gigs                  Gig[]
+  applications          GigApplication[]
+  transactions          Transaction[]
+  pensionAccount        PensionAccount?
+  savingsWallet         SavingsWallet?
+  trustCredit           TrustCredit?
+  reviews               Review[]
+  communityEndorsements CommunityEndorsement[]
+  
+  // Metadata
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  lastActiveAt          DateTime?
+
+  @@index([email])
+  @@index([phone])
+  @@index([location])
+  @@index([userType])
+  @@index([economicIdentityScore])
+}
+
+enum UserType {
+  WORKER
+  TRADER
+  EMPLOYER
+  AGENT
+}
+
+model WorkerProfile {
+  id                    String   @id @default(cuid())
+  userId                String   @unique
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Skills
+  skills                String[] // JSON array of skill IDs
+  experienceLevel       String   @default("beginner") // beginner, intermediate, advanced
+  certifications        String[]
+  
+  // Work History
+  totalGigsCompleted    Int      @default(0)
+  totalGigsRejected     Int      @default(0)
+  averageRating         Float    @default(0)
+  completionRate        Float    @default(0)
+  
+  // Behavioral Signals
+  onTimeCompletionRate  Float    @default(0)
+  qualityRating         Float    @default(0)
+  communicationScore    Float    @default(0)
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model TraderProfile {
+  id                    String   @id @default(cuid())
+  userId                String   @unique
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Business Info
+  businessName          String
+  businessCategory      String   // electronics, textiles, food, services, etc.
+  shopLocation          String
+  businessRegistration  String?
+  taxId                 String?
+  
+  // Business Activity
+  monthlyTransactionVolume Float @default(0)
+  inventoryValue        Float   @default(0)
+  businessAge           Int     // months
+  averageTransactionSize Float  @default(0)
+  
+  // Behavioral Signals
+  transactionConsistency Float  @default(0)
+  repaymentConsistency  Float  @default(0)
+  seasonalActivity      String? // JSON: peak seasons
+  marketDemandTrend     Float  @default(0)
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model Gig {
+  id                    String   @id @default(cuid())
+  creatorId             String
+  creator               User     @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  
+  // Gig Details
+  title                 String
+  description           String
+  category              String
+  requiredSkills        String[] // JSON array
+  location              String
+  
+  // Terms
+  paymentAmount         Float
+  currency              String   @default("NGN")
+  duration              Int      // in hours or days
+  startDate             DateTime
+  endDate               DateTime?
+  
+  language              String   @default("en")
+  
+  // Gig Status
+  status                GigStatus @default(OPEN)
+  maxWorkers            Int      @default(1)
+  
+  // Escrow Details (Squad API)
+  squadEscrowId         String?
+  escrowStatus          String   @default("not_initiated") // not_initiated, initiated, held, released, cancelled
+  escrowAmount          Float?
+  
+  // Applications
+  applications          GigApplication[]
+  
+  // Transactions
+  transactions          Transaction[]
+  
+  // Metadata
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  completedAt           DateTime?
+
+  @@index([creatorId])
+  @@index([status])
+  @@index([location])
+  @@index([startDate])
+}
+
+enum GigStatus {
+  OPEN
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  DISPUTED
+}
+
+model GigApplication {
+  id                    String   @id @default(cuid())
+  gigId                 String
+  gig                   Gig      @relation(fields: [gigId], references: [id], onDelete: Cascade)
+  applicantId           String
+  applicant             User     @relation(fields: [applicantId], references: [id], onDelete: Cascade)
+  
+  // Match Score
+  matchScore            Float
+  skillMatchPercentage  Float
+  locationDistance      Float    // in km
+  trustScoreAtApplication Float
+  
+  // Status
+  status                ApplicationStatus @default(APPLIED)
+  appliedAt             DateTime @default(now())
+  respondedAt           DateTime?
+  acceptedAt            DateTime?
+  rejectedReason        String?
+  
+  // Interview/Verification
+  interviewNotes        String?
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@unique([gigId, applicantId])
+  @@index([gigId])
+  @@index([applicantId])
+  @@index([status])
+}
+
+enum ApplicationStatus {
+  APPLIED
+  SHORTLISTED
+  INTERVIEWED
+  ACCEPTED
+  REJECTED
+  WITHDRAWN
+}
+
+model Transaction {
+  id                    String   @id @default(cuid())
+  gigId                 String?
+  gig                   Gig?     @relation(fields: [gigId], references: [id])
+  
+  // Parties
+  fromUserId            String
+  fromUser              User     @relation(fields: [fromUserId], references: [id], onDelete: Cascade)
+  toUserId              String?  // can be null for transfers to system
+  
+  // Amount Details
+  amount                Float
+  currency              String   @default("NGN")
+  transactionType       TransactionType
+  
+  // Pension Portion (automatic deduction)
+  pensionContribution   Float    @default(0)
+  savingsContribution   Float    @default(0)
+  netAmount             Float    // amount - pension - savings
+  
+  // Squad API Integration
+  squadTransactionId    String?
+  squadReference        String?
+  squadStatus           String?  // pending, completed, failed
+  
+  // Escrow Details
+  escrowId              String?
+  escrowStatus          String?  // held, released, cancelled
+  
+  // Status
+  status                TransactionStatus @default(PENDING)
+  failureReason         String?
+  
+  // Timestamps
+  initiatedAt           DateTime @default(now())
+  completedAt           DateTime?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([fromUserId])
+  @@index([gigId])
+  @@index([transactionType])
+  @@index([status])
+  @@index([squadTransactionId])
+}
+
+enum TransactionType {
+  GIG_PAYMENT
+  ESCROW_FUND
+  ESCROW_RELEASE
+  PENSION_CONTRIBUTION
+  SAVINGS_TRANSFER
+  REFUND
+}
+
+enum TransactionStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+model PensionAccount {
+  id                    String   @id @default(cuid())
+  userId                String   @unique
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Pension Details
+  pensionBalance        Float    @default(0)
+  totalContributions    Float    @default(0)
+  contributionCount     Int      @default(0)
+  
+  // Contribution Rate
+  contributionPercentage Float  @default(5) // percentage of gig income
+  
+  // Provider Info
+  pensionProvider       String   @default("system") // retirement fund provider
+  providerAccountId     String?  // external account ID
+  
+  // Performance
+  monthlyContributions  Float    @default(0)
+  lastContributionDate  DateTime?
+  averageMonthlyContribution Float @default(0)
+  
+  // Squad Integration
+  squadWalletId         String?
+  
+  // Projections
+  projectedRetirementAge Int    @default(65)
+  projectedRetirementIncome Float @default(0)
+  
+  // Status
+  status                PensionStatus @default(ACTIVE)
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([userId])
+}
+
+enum PensionStatus {
+  ACTIVE
+  SUSPENDED
+  CLOSED
+}
+
+model SavingsWallet {
+  id                    String   @id @default(cuid())
+  userId                String   @unique
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Balance
+  balance               Float    @default(0)
+  totalDeposited        Float    @default(0)
+  totalWithdrawn        Float    @default(0)
+  
+  // Goals
+  savingsGoals          String[]  // JSON array of goals
+  autoSavingsEnabled    Boolean  @default(false)
+  autoSavingsPercentage Float   @default(0)
+  
+  // Squad Integration
+  squadWalletId         String?
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model TrustCredit {
+  id                    String   @id @default(cuid())
+  userId                String   @unique
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Trust Signals
+  pensionConsistencyScore Float
+  escrowCompletionRate  Float
+  savingsDisciplineScore Float
+  communityTrustScore   Float
+  overallTrustScore     Float
+  
+  // Eligibility
+  eligible              Boolean  @default(false)
+  eligibilityThreshold  Float    @default(0.7)
+  
+  // Partner Banks
+  partnerBanks          String[] // JSON array of bank IDs
+  
+  // Monitoring
+  lastMonitoredAt       DateTime?
+  monitoringFrequency   String   @default("weekly") // weekly, monthly
+  
+  // Repayment History (for external credit)
+  externalCreditActive  Boolean  @default(false)
+  repaymentAnomalies    Int      @default(0)
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([userId])
+  @@index([eligible])
+}
+
+model CommunityEndorsement {
+  id                    String   @id @default(cuid())
+  endorsedUserId        String
+  endorsedUser          User     @relation(fields: [endorsedUserId], references: [id], onDelete: Cascade)
+  
+  endorserId            String   // ID of person giving endorsement
+  endorserName          String
+  endorserLocation      String
+  
+  // Endorsement Details
+  endorsementType       String   // skills, reliability, trustworthiness
+  comments              String
+  rating                Int      @default(5) // 1-5 stars
+  
+  verified              Boolean  @default(false)
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([endorsedUserId])
+}
+
+model Review {
+  id                    String   @id @default(cuid())
+  reviewerId            String
+  reviewer              User     @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
+  
+  revieweeId            String
+  
+  // Review Details
+  rating                Float
+  comment               String
+  reviewType            String   // work_quality, reliability, communication
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([reviewerId])
+  @@index([revieweeId])
+}
+
+// Squad API Webhook Logs
+model SquadWebhookLog {
+  id                    String   @id @default(cuid())
+  eventType             String   // transaction.completed, transaction.failed, etc.
+  webhookPayload        String   // JSON stringified
+  transactionId         String?
+  status                String   @default("processed")
+  errorMessage          String?
+  
+  createdAt             DateTime @default(now())
+
+  @@index([eventType])
+  @@index([transactionId])
+}
+
+// Economic Insights
+model EconomicInsight {
+  id                    String   @id @default(cuid())
+  region                String
+  metric                String   // active_workers, avg_gig_price, pension_growth, etc.
+  value                 Float
+  trend                 String   @default("stable") // up, down, stable
+  
+  recordedAt            DateTime @default(now())
+  createdAt             DateTime @default(now())
+
+  @@index([region])
+  @@index([metric])
+  @@index([recordedAt])
+}
