@@ -1,0 +1,45 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: sabiwork
+      POSTGRES_PASSWORD: sabiwork_pass
+      POSTGRES_DB: sabiwork
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+      - redis
+    environment:
+      DATABASE_URL: "postgresql://sabiwork:sabiwork_pass@db:5432/sabiwork?schema=public"
+      JWT_SECRET: "change_this_in_production"
+      JWT_EXPIRY: "7d"
+      SQUAD_API_KEY: "your_squad_api_key"
+      SQUAD_WEBHOOK_SECRET: "your_squad_webhook_secret"
+      SQUAD_API_BASE_URL: "https://api.sandbox.squad.co"
+      REDIS_URL: "redis://redis:6379"
+      APP_NAME: "sabiwork"
+      FRONTEND_URL: "http://localhost:3001"
+    volumes:
+      - .:/app
+    command: ["npm", "run", "dev"]
+
+volumes:
+  db_data:

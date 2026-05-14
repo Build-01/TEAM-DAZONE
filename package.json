@@ -1,7 +1,7 @@
 {
-  "name": "economic-identity-backend",
+  "name": "sabiwork-backend",
   "version": "1.0.0",
-  "description": "AI-powered economic identity platform backend with monitored trust credit and pension systems",
+  "description": "Sabiwork backend for AI-powered trust credit, pension automation, and informal economy onboarding",
   "main": "src/index.js",
   "scripts": {
     "dev": "nodemon src/index.js",
@@ -14,14 +14,14 @@
     "test": "jest"
   },
   "keywords": [
-    "economic-identity",
+    "sabiwork",
     "fintech",
     "squad-api",
     "pension",
     "trust-credit",
     "informal-economy"
   ],
-  "author": "Economic Identity Team",
+  "author": "Sabiwork Team",
   "license": "MIT",
   "dependencies": {
     "@prisma/client": "^5.8.0",

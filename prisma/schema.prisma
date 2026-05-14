@@ -56,6 +56,7 @@ model User {
   trustCredit           TrustCredit?
   reviews               Review[]
   communityEndorsements CommunityEndorsement[]
+  trustScoreLogs        TrustScoreLog[]
   
   // Metadata
   createdAt             DateTime  @default(now())
@@ -168,6 +169,7 @@ model Gig {
   
   // Transactions
   transactions          Transaction[]
+  contract              Contract?
   
   // Metadata
   createdAt             DateTime @default(now())
@@ -186,6 +188,21 @@ enum GigStatus {
   COMPLETED
   CANCELLED
   DISPUTED
+}
+
+enum ContractStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  DISPUTED
+  CANCELLED
+}
+
+enum DisputeStatus {
+  NONE
+  OPEN
+  RESOLVED_WORKER
+  RESOLVED_CLIENT
 }
 
 model GigApplication {
@@ -414,6 +431,49 @@ model CommunityEndorsement {
   updatedAt             DateTime @updatedAt
 
   @@index([endorsedUserId])
+}
+
+model TrustScoreLog {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gigId         String?
+  contractId    String?
+  change        Float
+  previousScore Float
+  newScore      Float
+  reason        String
+  createdAt     DateTime @default(now())
+
+  @@index([userId])
+  @@index([gigId])
+  @@index([contractId])
+}
+
+model Contract {
+  id               String        @id @default(cuid())
+  gigId            String        @unique
+  gig              Gig           @relation(fields: [gigId], references: [id], onDelete: Cascade)
+  workerId         String
+  worker           User          @relation("ContractWorker", fields: [workerId], references: [id], onDelete: Cascade)
+  clientId         String
+  client           User          @relation("ContractClient", fields: [clientId], references: [id], onDelete: Cascade)
+  workerConfirmed  Boolean       @default(false)
+  clientConfirmed  Boolean       @default(false)
+  status           ContractStatus @default(PENDING)
+  disputeStatus    DisputeStatus @default(NONE)
+  disputeReason    String?
+  workerRating     Int?
+  clientRating     Int?
+  completedAt      DateTime?
+  trustFrozen      Boolean       @default(false)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  @@index([workerId])
+  @@index([clientId])
+  @@index([status])
+  @@index([disputeStatus])
 }
 
 model Review {
