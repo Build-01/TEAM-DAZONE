@@ -29,91 +29,92 @@ const CreateAccount = () => {
 
   return (
     <div className="main-container">
-      {/* Back Button */}
-      <div 
-        style={{ cursor: 'pointer', marginBottom: '20px', display: 'inline-block' }} 
-        onClick={() => navigate(-1)}
-      >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-      </div>
-
-      <h2 style={{ fontSize: '28px', fontWeight: 'bold', margin: '0' }}>Create your account</h2>
-      <p style={{ color: 'var(--text-gray)', marginBottom: '30px', marginTop: '8px' }}>Let's get you started</p>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-        <div>
-          <label style={labelStyle}>Phone or Email</label>
-          <input type="text" placeholder="+234 801 234 5678" style={inputStyle} />
+      <div className="content-area">
+        {/* Back Button */}
+        <div 
+          style={{ cursor: 'pointer', marginBottom: '20px', display: 'inline-block' }} 
+          onClick={() => navigate(-1)}
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
         </div>
 
-        <div style={{ position: 'relative' }}>
-          <label style={labelStyle}>Password</label>
-          <input 
-            type={showPassword ? "text" : "password"} 
-            placeholder="••••••••••••" 
-            style={inputStyle} 
+        <h2 style={{ fontSize: '28px', fontWeight: 'bold', margin: '0' }}>Create your account</h2>
+        <p style={{ color: 'var(--text-gray)', marginBottom: '30px', marginTop: '8px' }}>Let's get you started</p>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <div>
+            <label style={labelStyle}>Phone or Email</label>
+            <input type="text" placeholder="+234 801 234 5678" className="ui-input" />
+          </div>
+
+          <div style={{ position: 'relative' }}>
+            <label style={labelStyle}>Password</label>
+            <input 
+              type={showPassword ? "text" : "password"} 
+              placeholder="••••••••••••" 
+              className="ui-input" 
+            />
+            <span 
+              style={eyeIconStyle} 
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <EyeIcon /> : <EyeOffIcon />}
+            </span>
+          </div>
+
+          <div>
+            <label style={labelStyle}>Referral Code (optional)</label>
+            <input type="text" placeholder="AMINA123" className="ui-input" />
+          </div>
+        </div>
+
+        <button 
+          className="btn-primary btn-onboarding" 
+          style={{ marginTop: '30px', boxSizing: 'border-box' }}
+          onClick={handleCreateAccount}
+        >
+          Create Account
+        </button>
+
+        <div style={dividerContainer}>
+          <div style={line}></div>
+          <span style={{ padding: '0 10px', color: 'var(--text-gray)', fontSize: '12px' }}>or continue with</span>
+          <div style={line}></div>
+        </div>
+
+        {/* Social Buttons with Logos */}
+        <button style={socialButtonStyle}>
+          <img 
+            src="https://www.google.com/favicon.ico" 
+            alt="google" 
+            style={{ width: '18px', height: '18px', marginRight: '10px' }} 
           />
-          <span 
-            style={eyeIconStyle} 
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            {showPassword ? <EyeIcon /> : <EyeOffIcon />}
-          </span>
-        </div>
+          Continue with Google
+        </button>
 
-        <div>
-          <label style={labelStyle}>Referral Code (optional)</label>
-          <input type="text" placeholder="AMINA123" style={inputStyle} />
-        </div>
+        <button style={socialButtonStyle}>
+          <img 
+            src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" 
+            alt="fb" 
+            style={{ width: '18px', height: '18px', marginRight: '10px' }} 
+          />
+          Continue with Facebook
+        </button>
+
+        <p style={termsStyle}>
+          By creating an account, you agree to our <span style={{ color: 'var(--primary-green)', cursor: 'pointer' }}>Terms & Conditions</span>
+        </p>
       </div>
-
-      <button 
-        className="btn-primary btn-onboarding" 
-        style={{ marginTop: '30px', boxSizing: 'border-box' }}
-        onClick={handleCreateAccount}
-      >
-        Create Account
-      </button>
-
-      <div style={dividerContainer}>
-        <div style={line}></div>
-        <span style={{ padding: '0 10px', color: 'var(--text-gray)', fontSize: '12px' }}>or continue with</span>
-        <div style={line}></div>
-      </div>
-
-      {/* Social Buttons with Logos */}
-      <button style={socialButtonStyle}>
-        <img 
-          src="https://www.google.com/favicon.ico" 
-          alt="google" 
-          style={{ width: '18px', height: '18px', marginRight: '10px' }} 
-        />
-        Continue with Google
-      </button>
-
-      <button style={socialButtonStyle}>
-        <img 
-          src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" 
-          alt="fb" 
-          style={{ width: '18px', height: '18px', marginRight: '10px' }} 
-        />
-        Continue with Facebook
-      </button>
-
-      <p style={termsStyle}>
-        By creating an account, you agree to our <span style={{ color: 'var(--primary-green)', cursor: 'pointer' }}>Terms & Conditions</span>
-      </p>
     </div>
   );
 };
 
 // --- STYLES ---
 const labelStyle = { display: 'block', fontSize: '14px', marginBottom: '8px', fontWeight: '500' };
-const inputStyle = { width: '100%', padding: '14px', borderRadius: '12px', border: '1px solid #e5e7eb', fontSize: '16px', outline: 'none', boxSizing: 'border-box' };
-const eyeIconStyle = { position: 'absolute', right: '12px', top: '38px', cursor: 'pointer', color: '#9ca3af', display: 'flex', alignItems: 'center' };
-const socialButtonStyle = { width: '100%', padding: '12px', borderRadius: '10px', border: '1px solid #e5e7eb', backgroundColor: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '12px', cursor: 'pointer', fontWeight: '500', boxSizing: 'border-box' };
+const eyeIconStyle = { position: 'absolute', right: '12px', top: '38px', cursor: 'pointer', color: '#6b7280', display: 'flex', alignItems: 'center' };
+const socialButtonStyle = { width: '100%', padding: '12px', borderRadius: '10px', border: '1px solid rgba(107, 114, 128, 0.25)', backgroundColor: 'var(--bg-light)', boxShadow: '0 2px 4px -1px rgba(29, 29, 31, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '12px', cursor: 'pointer', fontWeight: '500', boxSizing: 'border-box' };
 const dividerContainer = { display: 'flex', alignItems: 'center', margin: '25px 0' };
-const line = { flex: 1, height: '1px', backgroundColor: '#e5e7eb' };
+const line = { flex: 1, height: '1px', backgroundColor: '#6b7280' };
 const termsStyle = { textAlign: 'center', fontSize: '12px', color: 'var(--text-gray)', marginTop: '20px', lineHeight: '1.5' };
 
 export default CreateAccount;

@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 import Landing from './components/Landing';
 import CreateAccount from './components/CreateAccount';
 import DescribeYou from './components/DescribeYou'; 
@@ -21,6 +22,24 @@ function App() {
   return (
     <Router>
       <div className="App">
+        <Toaster 
+          position="top-center" 
+          toastOptions={{
+            style: {
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
+              borderRadius: '12px',
+              background: 'var(--bg-white)',
+              color: 'var(--text-dark)',
+              boxShadow: '0 4px 15px rgba(29, 29, 31, 0.1)',
+            },
+            success: {
+              iconTheme: {
+                primary: 'var(--primary-green)',
+                secondary: '#fff',
+              },
+            },
+          }}
+        />
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/register" element={<CreateAccount />} />

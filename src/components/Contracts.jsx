@@ -10,36 +10,95 @@ const Contracts = () => {
   ];
 
   return (
-    <div className="main-container" style={{ backgroundColor: '#fff', height: '850px', position: 'relative', paddingBottom: '100px' }}>
-      <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '25px' }}>My Contracts</h2>
+    <div className="main-container">
       
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-        {activeContracts.map(item => (
-          <div key={item.id} style={contractCard} onClick={() => navigate(`/contract/${item.id}`)}>
-            <div style={{ flex: 1 }}>
-              <h4 style={{ margin: 0, fontSize: '16px', fontWeight: 'bold' }}>{item.title}</h4>
-              <p style={{ margin: '4px 0 0', fontSize: '13px', color: 'var(--text-gray)' }}>{item.artisan}</p>
+      {/* HEADER AREA */}
+      <div style={{ padding: '40px 20px 20px' }}>
+        <h2 style={{ fontSize: '24px', fontWeight: 'bold', margin: 0 }}>My Contracts</h2>
+      </div>
+      
+      {/* SCROLLABLE LIST */}
+      <div className="content-area">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+          {activeContracts.map(item => (
+            <div key={item.id} style={contractCard} onClick={() => navigate(`/contract/${item.id}`)}>
+              <div style={{ flex: 1 }}>
+                <h4 style={{ margin: 0, fontSize: '16px', fontWeight: 'bold' }}>{item.title}</h4>
+                <p style={{ margin: '4px 0 0', fontSize: '13px', color: 'var(--text-gray)' }}>{item.artisan}</p>
+              </div>
+              <div>
+                <span style={{ 
+                  padding: '4px 10px', 
+                  borderRadius: '12px', 
+                  fontSize: '11px', 
+                  fontWeight: 'bold', 
+                  backgroundColor: item.status === 'Completed' ? 'rgba(17, 122, 101, 0.15)' : 'rgba(244, 183, 64, 0.15)', 
+                  color: item.status === 'Completed' ? 'var(--primary-green)' : 'var(--primary-purple)' 
+                }}>
+                  {item.status}
+                </span>
+              </div>
             </div>
-            <div style={{ ...statusTag, color: item.color, backgroundColor: `${item.color}10` }}>{item.status}</div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
-      {/* Bottom Nav */}
-      <div style={bottomNavStyle}>
-        <div style={navItem} onClick={() => navigate('/dashboard')}><HomeIcon color="#9ca3af" /><div style={{ marginTop: '4px' }}>Home</div></div>
-        <div style={navItemActive} onClick={() => navigate('/contracts')}><ContractIcon color="var(--primary-purple)" /><div style={{ marginTop: '4px' }}>Contracts</div></div>
-        <div style={navItem} onClick={() => navigate('/payments')}><PaymentIcon color="#9ca3af" /><div style={{ marginTop: '4px' }}>Payments</div></div>
-        <div style={navItem} onClick={() => navigate('/chat-list')}><MessageIcon color="#9ca3af" /><div style={{ marginTop: '4px' }}>Messages</div></div>
-        <div style={navItem} onClick={() => navigate('/profile')}><ProfileIcon color="#9ca3af" /><div style={{ marginTop: '4px' }}>Profile</div></div>
+      {/* BOTTOM NAVIGATION */}
+      <div className="glass-nav">
+        <div style={navItem} onClick={() => navigate('/dashboard')}>
+          <HomeIcon color="#6b7280" />
+          <div style={{ marginTop: '4px' }}>Home</div>
+        </div>
+        <div style={navItemActive} onClick={() => navigate('/contracts')}>
+          <ContractIcon color="var(--primary-green)" />
+          <div style={{ marginTop: '4px' }}>Contracts</div>
+        </div>
+        <div style={navItem} onClick={() => navigate('/payments')}>
+          <PaymentIcon color="#6b7280" />
+          <div style={{ marginTop: '4px' }}>Payments</div>
+        </div>
+        <div style={navItem} onClick={() => navigate('/chat-list')}>
+          <MessageIcon color="#6b7280" />
+          <div style={{ marginTop: '4px' }}>Messages</div>
+        </div>
+        <div style={navItem} onClick={() => navigate('/profile')}>
+          <ProfileIcon color="#6b7280" />
+          <div style={{ marginTop: '4px' }}>Profile</div>
+        </div>
       </div>
     </div>
   );
 };
 
-const contractCard = { padding: '18px', borderRadius: '16px', border: '1px solid #f3f4f6', display: 'flex', alignItems: 'center', cursor: 'pointer' };
-const statusTag = { padding: '6px 10px', borderRadius: '8px', fontSize: '12px', fontWeight: 'bold' };
-// ... (Copy bottomNavStyle and Icons from Dashboard.jsx)
+// --- STYLES ---
+const contractCard = { 
+  padding: '18px', 
+  borderRadius: '16px', 
+  display: 'flex', 
+  alignItems: 'center', 
+  cursor: 'pointer',
+  backgroundColor: 'var(--bg-light)',
+  boxShadow: '0 4px 6px -1px rgba(29, 29, 31, 0.08), 0 2px 4px -1px rgba(29, 29, 31, 0.08)',
+  border: '1px solid rgba(107, 114, 128, 0.25)'
+};
+
+const navItem = { 
+  textAlign: 'center', 
+  fontSize: '11px', 
+  color: '#6b7280', 
+  cursor: 'pointer', 
+  display: 'flex', 
+  flexDirection: 'column', 
+  alignItems: 'center', 
+  flex: 1 
+};
+
+const navItemActive = { 
+  ...navItem, 
+  color: 'var(--primary-green)', 
+  fontWeight: 'bold' 
+};
+
 // --- ICON COMPONENTS ---
 const HomeIcon = ({ color }) => (
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
@@ -57,18 +116,4 @@ const ProfileIcon = ({ color }) => (
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
 );
 
-// --- NAVIGATION STYLES ---
-const bottomNavStyle = { 
-  position: 'absolute', bottom: 0, left: 0, right: 0, height: '80px', 
-  backgroundColor: 'white', borderTop: '1px solid #eee', display: 'flex', 
-  justifyContent: 'space-around', alignItems: 'center', paddingBottom: '15px', boxSizing: 'border-box' 
-};
-const navItem = { 
-  textAlign: 'center', fontSize: '11px', color: '#9ca3af', cursor: 'pointer', 
-  display: 'flex', flexDirection: 'column', alignItems: 'center' 
-};
-const navItemActive = { 
-  textAlign: 'center', fontSize: '11px', color: 'var(--primary-purple)', 
-  fontWeight: 'bold', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center' 
-};
 export default Contracts;

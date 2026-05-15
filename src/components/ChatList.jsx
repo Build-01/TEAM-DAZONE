@@ -5,59 +5,59 @@ const ChatList = () => {
   const navigate = useNavigate();
 
   const chats = [
-    { id: 1, name: 'Adekunle Jones', lastMsg: 'Does 2:00 PM work for you?', time: '10:05 AM', unread: 2, img: '👨🏾‍🔧' },
-    { id: 2, name: 'Blessing Okon', lastMsg: 'I have sent the invoice.', time: 'Yesterday', unread: 0, img: '👩🏾‍🔧' },
-    { id: 3, name: 'Musa Ibrahim', lastMsg: 'Please send the location.', time: 'Monday', unread: 0, img: '👨🏾' }
+    { id: 1, name: 'Adekunle Jones', lastMsg: 'Does 2:00 PM work for you?', time: '10:05 AM', unread: 2, img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80" },
+    { id: 2, name: 'Blessing Okon', lastMsg: 'I have sent the invoice.', time: 'Yesterday', unread: 0, img: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=150&q=80" },
+    { id: 3, name: 'Musa Ibrahim', lastMsg: 'Please send the location.', time: 'Monday', unread: 0, img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80" }
   ];
 
   return (
-    <div style={layoutWrapper}>
-      {/* 1. Header Area */}
-      <div style={{ padding: '50px 20px 10px' }}>
-        <h2 style={{ fontSize: '24px', fontWeight: 'bold', margin: 0 }}>Messages</h2>
-      </div>
-      
-      {/* 2. Scrollable List Area (flex: 1 makes this fill the gap) */}
-      <div style={scrollArea}>
+    <div className="main-container">
+      <div className="content-area">
+        <div style={{ marginBottom: '20px' }}>
+          <h2 style={{ color: 'var(--text-dark)', fontSize: '24px', fontWeight: 'bold', margin: 0 }}>Messages</h2>
+        </div>
+        
         {chats.map(chat => (
           <div 
             key={chat.id} 
             onClick={() => navigate(`/messages/${chat.id}`)} 
             style={chatRow}
           >
-            <div style={avatarStyle}>{chat.img}</div>
+            <div style={avatarStyle}>
+              <img src={chat.img} alt="avatar" style={{width: '100%', height: '100%', objectFit: 'cover', borderRadius: 'inherit'}} />
+            </div>
             <div style={{ flex: 1 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <h4 style={{ margin: 0, fontSize: '16px', fontWeight: '700' }}>{chat.name}</h4>
-                <span style={{ fontSize: '11px', color: '#9ca3af' }}>{chat.time}</span>
+                <h4 style={{ color: 'var(--text-dark)', margin: 0, fontSize: '16px', fontWeight: '700' }}>{chat.name}</h4>
+                <span style={{ fontSize: '11px', color: 'var(--text-gray)' }}>{chat.time}</span>
               </div>
-              <p style={previewStyle}>{chat.lastMsg}</p>
+              <p style={{...previewStyle, color: 'var(--text-gray)'}}>{chat.lastMsg}</p>
             </div>
             {chat.unread > 0 && <div style={unreadBadge}>{chat.unread}</div>}
           </div>
         ))}
       </div>
 
-      {/* 3. Navigation Bar (Pinned to the bottom of the flex column) */}
-      <div style={bottomNavStyle}>
+      {/* 3. Navigation Bar (Pinned to bottom) */}
+      <div className="glass-nav">
         <div style={navItem} onClick={() => navigate('/dashboard')}>
-          <HomeIcon color="#9ca3af" />
+          <HomeIcon color="#6b7280" />
           <div style={{ marginTop: '4px' }}>Home</div>
         </div>
         <div style={navItem} onClick={() => navigate('/contracts')}>
-          <ContractIcon color="#9ca3af" />
+          <ContractIcon color="#6b7280" />
           <div style={{ marginTop: '4px' }}>Contracts</div>
         </div>
         <div style={navItem} onClick={() => navigate('/payments')}>
-          <PaymentIcon color="#9ca3af" />
+          <PaymentIcon color="#6b7280" />
           <div style={{ marginTop: '4px' }}>Payments</div>
         </div>
         <div style={navItemActive} onClick={() => navigate('/chat-list')}>
-          <MessageIcon color="var(--primary-purple)" />
+          <MessageIcon color="var(--primary-green)" />
           <div style={{ marginTop: '4px' }}>Messages</div>
         </div>
         <div style={navItem} onClick={() => navigate('/profile')}>
-          <ProfileIcon color="#9ca3af" />
+          <ProfileIcon color="#6b7280" />
           <div style={{ marginTop: '4px' }}>Profile</div>
         </div>
       </div>
@@ -66,26 +66,11 @@ const ChatList = () => {
 };
 
 // --- STYLES ---
-const layoutWrapper = {
-  display: 'flex',
-  flexDirection: 'column',
-  height: '100vh',
-  maxHeight: '850px',
-  backgroundColor: '#fff',
-  overflow: 'hidden'
-};
-
-const scrollArea = {
-  flex: 1,
-  overflowY: 'auto',
-  padding: '0 20px'
-};
-
 const chatRow = { 
   display: 'flex', 
   alignItems: 'center', 
   padding: '18px 0', 
-  borderBottom: '1px solid #f3f4f6', 
+  borderBottom: '1px solid rgba(107, 114, 128, 0.15)', 
   cursor: 'pointer', 
   gap: '15px' 
 };
@@ -94,11 +79,13 @@ const avatarStyle = {
   width: '50px', 
   height: '50px', 
   borderRadius: '50%', 
-  backgroundColor: '#f3f4f6', 
+  backgroundColor: 'var(--bg-light)', 
   display: 'flex', 
   alignItems: 'center', 
   justifyContent: 'center', 
-  fontSize: '24px' 
+  fontSize: '24px',
+  boxShadow: '0 2px 5px rgba(29, 29, 31, 0.08)',
+  border: '1px solid rgba(107, 114, 128, 0.25)'
 };
 
 const previewStyle = { 
@@ -112,8 +99,8 @@ const previewStyle = {
 };
 
 const unreadBadge = { 
-  backgroundColor: 'var(--primary-purple)', 
-  color: 'white', 
+  backgroundColor: 'var(--primary-green)', 
+  color: '#F7fbfa', 
   borderRadius: '50%', 
   width: '20px', 
   height: '20px', 
@@ -124,20 +111,10 @@ const unreadBadge = {
   fontWeight: 'bold' 
 };
 
-const bottomNavStyle = { 
-  height: '80px', 
-  backgroundColor: 'white', 
-  borderTop: '1px solid #eee', 
-  display: 'flex', 
-  justifyContent: 'space-around', 
-  alignItems: 'center', 
-  paddingBottom: '15px' 
-};
-
 const navItem = { 
   textAlign: 'center', 
   fontSize: '11px', 
-  color: '#9ca3af', 
+  color: '#6b7280', 
   cursor: 'pointer', 
   display: 'flex', 
   flexDirection: 'column', 
@@ -147,7 +124,7 @@ const navItem = {
 
 const navItemActive = { 
   ...navItem, 
-  color: 'var(--primary-purple)', 
+  color: 'var(--primary-green)', 
   fontWeight: 'bold' 
 };
 

@@ -1,13 +1,14 @@
 :root {
   --primary-green: #117a65;
-  --primary-purple: #6c63ff;
-  --bg-light: #f7fbfa;
+  --primary-purple: #F4b740; /* Repurposed to the new Yellow/Orange */
+  --bg-light: #F7fbfa;
+  --bg-white: #FFFFFF;
   --text-dark: #1d1d1f;
   --text-gray: #6b7280;
 }
 
 body {
-  background-color: #e5e7eb; /* Light gray background for the whole screen */
+  background-color: #6b7280; /* Use allowed gray for the backdrop */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -16,34 +17,100 @@ body {
 }
 
 .main-container {
-  width: 100%;
-  max-width: 400px; /* This makes it look like a phone on your laptop */
-  height: 850px;
-  background: white;
-  border-radius: 30px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-  padding: 40px 25px;
-  overflow-y: auto;
+  width: 393px;
+  max-width: 95%;
+  height: 852px;
+  background: var(--bg-light); /* Back to Off-white background */
+  border-radius: 48px;
+  box-shadow: 0 25px 50px -12px rgba(29, 29, 31, 0.25);
+  padding: 0;
+  overflow: hidden;
   position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 40px 25px 120px 25px;
+}
+
+/* Premium Card Style */
+.ui-card {
+  background-color: var(--bg-white); /* Back to Pure White */
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: 0 8px 12px -2px rgba(29, 29, 31, 0.08), 0 4px 6px -2px rgba(29, 29, 31, 0.04);
+  border: 1px solid rgba(107, 114, 128, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Premium Input Style */
+.ui-input {
+  width: 100%;
+  padding: 16px;
+  border-radius: 14px;
+  border: 1.5px solid rgba(107, 114, 128, 0.25);
+  background-color: var(--bg-white); /* Back to Pure White */
+  color: var(--text-dark);
+  font-size: 16px;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ui-input:focus {
+  border-color: var(--primary-green);
+  box-shadow: 0 0 0 3px rgba(17, 122, 101, 0.15);
 }
 
 .btn-primary {
   width: 100%;
-  padding: 16px;
-  border-radius: 12px;
+  padding: 18px;
+  border-radius: 16px;
   border: none;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 16px;
   cursor: pointer;
   margin-bottom: 12px;
-  transition: transform 0.2s;
+  transition: all 0.2s ease;
+  background-color: var(--primary-green);
+  color: var(--bg-white);
+  box-shadow: 0 10px 15px -3px rgba(17, 122, 101, 0.2);
 }
 
 .btn-primary:active {
   transform: scale(0.98);
+  box-shadow: 0 5px 5px -3px rgba(17, 122, 101, 0.2);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 12px 20px -3px rgba(17, 122, 101, 0.3);
 }
 
 .btn-onboarding {
   background-color: var(--primary-green);
-  color: white;
+  color: var(--bg-white);
+}
+
+/* Glassmorphism Navigation */
+.glass-nav {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 100px;
+  background-color: rgba(255, 255, 255, 0.85); /* Back to white glass */
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(107, 114, 128, 0.15);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding-bottom: 35px;
+  padding-left: 20px;
+  padding-right: 20px;
+  box-shadow: 0 -4px 15px rgba(29, 29, 31, 0.05);
+  box-sizing: border-box;
+  z-index: 10;
 }

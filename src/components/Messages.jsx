@@ -7,33 +7,42 @@ const Messages = () => {
   const [text, setText] = useState('');
 
   const chatPartners = [
-    { id: 1, name: 'Adekunle Jones' },
-    { id: 2, name: 'Blessing Okon' },
-    { id: 3, name: 'Musa Ibrahim' }
+    { id: 1, name: 'Adekunle Jones', initialMsg: "Hello Tunde, I've seen your request for the POP ceiling." },
+    { id: 2, name: 'Blessing Okon', initialMsg: "Hi Tunde, the invoice for the Ankara shirts is ready." },
+    { id: 3, name: 'Musa Ibrahim', initialMsg: "Good day, please send the location for the wiring job." }
   ];
 
+  // This finds the specific person based on the URL ID
   const currentPartner = chatPartners.find(p => p.id === parseInt(id)) || chatPartners[0];
 
   return (
-    /* We are using flex column to stack Header, Messages, Input, and Nav */
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', maxHeight: '850px', backgroundColor: '#fff', overflow: 'hidden' }}>
+    <div className="main-container">
       
       {/* HEADER */}
       <div style={chatHeader}>
         <div style={{ cursor: 'pointer', padding: '5px' }} onClick={() => navigate('/chat-list')}>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" strokeWidth="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--bg-light)" strokeWidth="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
         </div>
         <div style={{ flex: 1, marginLeft: '15px' }}>
           <h4 style={{ margin: 0, fontSize: '16px', fontWeight: 'bold' }}>{currentPartner.name}</h4>
-          <span style={{ fontSize: '12px', color: 'var(--primary-green)' }}>● Online</span>
+          <span style={{ fontSize: '12px', color: '#117a65' }}>● Online</span>
         </div>
       </div>
 
-      {/* MESSAGES AREA (This part scrolls) */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '20px', display: 'flex', flexDirection: 'column', gap: '15px', backgroundColor: '#fdfdfd' }}>
+      {/* MESSAGES AREA */}
+      <div className="content-area" style={{ display: 'flex', flexDirection: 'column', gap: '15px', backgroundColor: 'var(--bg-light)' }}>
         <div style={{ alignSelf: 'flex-start', maxWidth: '80%' }}>
-          <div style={bubbleThem}>Hello Tunde, regarding the request...</div>
+          <div style={bubbleThem}>
+            {currentPartner.initialMsg}
+          </div>
         </div>
+        
+        {/* User's sent messages would appear here */}
+        {text && (
+           <div style={{ alignSelf: 'flex-end', maxWidth: '80%', marginTop: '10px' }}>
+             <div style={bubbleMe}>Draft: {text}</div>
+           </div>
+        )}
       </div>
 
       {/* INPUT AREA */}
@@ -41,33 +50,34 @@ const Messages = () => {
         <input 
           type="text" 
           placeholder="Type a message..." 
-          style={chatInput} 
+          className="ui-input"
+          style={{ height: '50px', borderRadius: '25px' }} 
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
         <button style={sendBtn} onClick={() => setText('')}>➔</button>
       </div>
 
-      {/* NAVIGATION BAR (Naturally sits at the bottom because of flex: 1 above) */}
+      {/* NAVIGATION BAR */}
       <div style={bottomNavStyle}>
         <div style={navItem} onClick={() => navigate('/dashboard')}>
-          <HomeIcon color="#9ca3af" />
+          <HomeIcon color="#6b7280" />
           <div style={{ marginTop: '4px' }}>Home</div>
         </div>
         <div style={navItem} onClick={() => navigate('/contracts')}>
-          <ContractIcon color="#9ca3af" />
+          <ContractIcon color="#6b7280" />
           <div style={{ marginTop: '4px' }}>Contracts</div>
         </div>
         <div style={navItem} onClick={() => navigate('/payments')}>
-          <PaymentIcon color="#9ca3af" />
+          <PaymentIcon color="#6b7280" />
           <div style={{ marginTop: '4px' }}>Payments</div>
         </div>
         <div style={navItemActive} onClick={() => navigate('/chat-list')}>
-          <MessageIcon color="var(--primary-purple)" />
+          <MessageIcon color="var(--primary-green)" />
           <div style={{ marginTop: '4px' }}>Messages</div>
         </div>
         <div style={navItem} onClick={() => navigate('/profile')}>
-          <ProfileIcon color="#9ca3af" />
+          <ProfileIcon color="#6b7280" />
           <div style={{ marginTop: '4px' }}>Profile</div>
         </div>
       </div>
@@ -75,25 +85,38 @@ const Messages = () => {
   );
 };
 
-// --- STYLES (No Absolute Positioning) ---
-const chatHeader = { display: 'flex', alignItems: 'center', padding: '50px 20px 15px', borderBottom: '1px solid #f3f4f6' };
-const bubbleThem = { padding: '12px 16px', fontSize: '14px', backgroundColor: '#f3f4f6', color: '#1d1d1f', borderRadius: '18px 18px 18px 2px' };
-const inputArea = { display: 'flex', alignItems: 'center', gap: '10px', padding: '15px 20px', borderTop: '1px solid #f3f4f6' };
-const chatInput = { flex: 1, padding: '12px 15px', borderRadius: '25px', border: '1px solid #e5e7eb', outline: 'none' };
-const sendBtn = { width: '45px', height: '45px', borderRadius: '50%', backgroundColor: 'var(--primary-purple)', border: 'none', color: 'white', cursor: 'pointer' };
+// --- STYLES ---
+const chatHeader = { 
+  display: 'flex', 
+  alignItems: 'center', 
+  padding: '40px 20px 15px', 
+  borderBottom: '1px solid rgba(107, 114, 128, 0.15)',
+  backgroundColor: 'var(--bg-light)',
+  boxShadow: '0 2px 10px rgba(29, 29, 31, 0.08)',
+  border: '1px solid rgba(107, 114, 128, 0.25)'
+};
+
+const bubbleThem = { padding: '12px 16px', fontSize: '14px', backgroundColor: 'var(--bg-light)', border: '1px solid rgba(107, 114, 128, 0.25)', color: '#1d1d1f', borderRadius: '18px 18px 18px 2px', boxShadow: '0 2px 5px rgba(29, 29, 31, 0.08)' };
+const bubbleMe = { padding: '12px 16px', fontSize: '14px', backgroundColor: 'var(--primary-green)', color: '#F7fbfa', borderRadius: '18px 18px 2px 18px', boxShadow: '0 2px 5px rgba(17, 122, 101, 0.2)' };
+
+const inputArea = { display: 'flex', alignItems: 'center', gap: '10px', padding: '15px 20px', borderTop: '1px solid rgba(107, 114, 128, 0.15)', backgroundColor: 'var(--bg-light)' };
+const sendBtn = { width: '45px', height: '45px', borderRadius: '50%', backgroundColor: 'var(--primary-green)', border: 'none', color: '#F7fbfa', cursor: 'pointer', boxShadow: '0 4px 6px rgba(17, 122, 101, 0.2)' };
 
 const bottomNavStyle = { 
-  height: '80px', 
-  backgroundColor: 'white', 
-  borderTop: '1px solid #eee', 
+  height: '100px', 
+  backgroundColor: 'var(--bg-light)', 
+  borderTop: '1px solid rgba(107, 114, 128, 0.15)', 
+  boxShadow: '0 -4px 10px rgba(29, 29, 31, 0.05)',
   display: 'flex', 
   justifyContent: 'space-around', 
   alignItems: 'center', 
-  paddingBottom: '15px' 
+  paddingBottom: '35px',
+  paddingLeft: '20px',
+  paddingRight: '20px'
 };
 
-const navItem = { textAlign: 'center', fontSize: '11px', color: '#9ca3af', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1 };
-const navItemActive = { ...navItem, color: 'var(--primary-purple)', fontWeight: 'bold' };
+const navItem = { textAlign: 'center', fontSize: '11px', color: '#6b7280', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1 };
+const navItemActive = { ...navItem, color: 'var(--primary-green)', fontWeight: 'bold' };
 
 // --- ICONS ---
 const HomeIcon = ({ color }) => (<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>);
