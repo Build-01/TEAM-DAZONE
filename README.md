@@ -1,43 +1,48 @@
-# sabiwork Backend
+# SabiWork - Economic Identity Platform for Africa's Informal Economy
 
-This repository contains the backend for `sabiwork`, an AI-driven economic identity platform focused on monitored trust credit, pension automation, and informal economy inclusion.
+## 🎯 The Problem We Solve
 
-## Run locally with Docker
+Africa's informal economy employs over 80% of the workforce, yet most workers lack formal records, credit access, pensions, insurance, and financial services. Because existing systems depend on traditional banking data, millions remain excluded, vulnerable to fraud, non-payment, and persistent poverty.
+
+## 💡 Our Solution
+
+An AI-powered platform that creates digital economic identities for informal workers. It onboards them, matches them to jobs, automates pension savings (10%), and builds verified trust credentials through an **Economic Identity Score™** based on:
+- Work activity & transaction consistency
+- Pension contributions
+- Community trust & repayment behavior
+
+This enables banks to offer credit safely, while workers gain financial visibility, secure payments, and long-term economic opportunities. **We provide trust credentials, not lending.**
+
+## 🔌 Squad APIs Used
+
+| API | Purpose |
+|-----|---------|
+| **Escrow transactions** | Secure gig payments |
+| **Instant worker payouts** | Immediate net payment after completion |
+| **Pension contribution transfers** | Auto-deduct 10% to pension |
+| **Payment webhooks** | Trigger trust score updates |
+| **Transaction reconciliation** | Match gig records with pension/payout logs |
+
+## 🏗️ Tech Stack
+
+- **Backend:** Node.js, Express, Prisma, PostgreSQL
+- **Frontend:** Next.js, TailwindCSS, TypeScript
+- **AI:** Hugging Face, embedding-based matching
+- **Payments:** Squad API
+
+## 📋 Development Pillars Addressed
+
+| Pillar | Description |
+|--------|-------------|
+| **AI** | Skill extraction from photos, job matching, fraud detection, behavioral trust scoring |
+| **Use of Data** | Alternative data (gig completion, escrow history, savings, community endorsements) replaces traditional credit history |
+| **Financial Innovation** | Automated pension inclusion for informal workers + trust-based credit credentials |
+| **Squad API** | Escrow, instant payouts, automated pension transfers — Squad is our financial backbone |
+
+## 🚀 Run Locally with Docker
 
 1. Copy `.env.example` to `.env` and update secrets.
 2. Build and start containers:
 
 ```bash
 docker compose up --build
-```
-
-3. Open the backend at `http://localhost:3000`
-
-## Docker setup
-
-- `Dockerfile` builds the Node.js app and generates Prisma client.
-- `docker-compose.yml` creates PostgreSQL, Redis, and the `sabiwork` app.
-
-## Environment variables
-
-Required values:
-
-- `DATABASE_URL`
-- `JWT_SECRET`
-- `SQUAD_API_KEY`
-- `SQUAD_WEBHOOK_SECRET`
-- `REDIS_URL`
-- `APP_NAME`
-- `FRONTEND_URL`
-
-## Host on a container platform
-
-Use the `Dockerfile` to deploy on any Docker-friendly host such as:
-
-- Render
-- Railway
-- Fly.io
-- AWS ECS / Fargate
-- DigitalOcean App Platform
-
-For production, set environment variables in your host provider dashboard and remove local `.env` files from source control.
