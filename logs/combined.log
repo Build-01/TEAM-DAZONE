@@ -10,3 +10,43 @@
 {"level":"info","message":"GET /favicon.ico"}
 {"level":"info","message":"GET /health"}
 {"level":"info","message":"GET /favicon.ico"}
+{"level":"info","message":"Server is running on port 3000 in development mode"}
+{"level":"info","message":"Server is running on port 3001 in development mode"}
+{"level":"info","message":"POST /api/auth/register"}
+{"level":"info","message":"POST /api/gigs"}
+{"level":"info","message":"POST /api/gigs"}
+{"level":"info","message":"POST /api/gigs"}
+{"level":"info","message":"POST /api/transactions/gigs/cmp5z4p1w000a2qkub14q7tzg/escrow"}
+{"level":"info","message":"Server is running on port 3000 in development mode"}
+{"level":"info","message":"GET /"}
+{"level":"info","message":"GET /favicon.ico"}
+{"level":"info","message":"POST /api/auth/login"}
+{"level":"info","message":"POST /api/auth/register"}
+{"level":"info","message":"POST /api/auth/register"}
+{"level":"info","message":"Server is running on port 3000 in development mode"}
+{"level":"info","message":"Server is running on port 3000 in development mode"}
+{"level":"info","message":"Server is running on port 3000 in development mode"}
+{"level":"info","message":"Server is running on port 3000 in development mode"}
+{"level":"info","message":"Server is running on port 3000 in development mode"}
+{"level":"info","message":"Server is running on port 3000 in development mode"}
+{"level":"info","message":"Server is running on port 3000 in development mode"}
+{"level":"info","message":"Server is running on port 3000 in development mode"}
+{"level":"info","message":"Server is running on port 3000 in development mode"}
+{"level":"info","message":"GET /"}
+{"level":"info","message":"GET /health"}
+{"level":"info","message":"POST /api/auth/register"}
+{"level":"info","message":"GET /register"}
+{"level":"info","message":"GET /_next/static/webpack/cd4fe772c2472a21.webpack.hot-update.json"}
+{"level":"info","message":"GET /register"}
+{"level":"info","message":"GET /register"}
+{"level":"info","message":"Server is running on port 3000 in development mode"}
+{"level":"info","message":"Server is running on port 3000 in development mode"}
+{"level":"info","message":"GET /"}
+{"level":"info","message":"Server is running on port 3001 in development mode"}
+{"level":"info","message":"GET /"}
+{"level":"info","message":"GET /favicon.ico"}
+{"level":"info","message":"GET /"}
+{"level":"info","message":"GET /favicon.ico"}
+{"level":"info","message":"GET /health"}
+{"level":"info","message":"GET /health"}
+{"level":"info","message":"GET /"}
