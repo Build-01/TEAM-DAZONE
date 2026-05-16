@@ -1,6 +1,8 @@
 const axios = require("axios");
 const winston = require("winston");
+const { PrismaClient } = require("@prisma/client");
 
+const prisma = new PrismaClient();
 const logger = winston.getLogger ? winston.getLogger() : console;
 
 class SquadService {
@@ -326,26 +328,104 @@ class SquadService {
   }
 
   async handleTransactionCompleted(data) {
-    // TODO: Update transaction status in database
-    logger.info(`Transaction completed: ${data.reference}`);
+    const reference = data.reference || data.transaction_reference || data.id;
+    logger.info(`Transaction completed: ${reference}`);
+    const transaction = await prisma.transaction.findFirst({
+      where: {
+        OR: [
+          { squadTransactionId: reference },
+          { squadReference: reference },
+          { escrowId: reference },
+        ],
+      },
+    });
+
+    if (transaction) {
+      await prisma.transaction.update({
+        where: { id: transaction.id },
+        data: {
+          status: "COMPLETED",
+          squadStatus: data.status || "completed",
+          completedAt: new Date(),
+        },
+      });
+    }
+
     return { processed: true, action: "transaction_completed" };
   }
 
   async handleTransactionFailed(data) {
-    // TODO: Handle transaction failure
-    logger.error(`Transaction failed: ${data.reference}`);
+    const reference = data.reference || data.transaction_reference || data.id;
+    logger.error(`Transaction failed: ${reference}`);
+    const transaction = await prisma.transaction.findFirst({
+      where: {
+        OR: [
+          { squadTransactionId: reference },
+          { squadReference: reference },
+          { escrowId: reference },
+        ],
+      },
+    });
+
+    if (transaction) {
+      await prisma.transaction.update({
+        where: { id: transaction.id },
+        data: {
+          status: "FAILED",
+          squadStatus: data.status || "failed",
+          completedAt: new Date(),
+        },
+      });
+    }
+
     return { processed: true, action: "transaction_failed" };
   }
 
   async handleEscrowReleased(data) {
-    // TODO: Update escrow status
-    logger.info(`Escrow released: ${data.reference}`);
+    const reference = data.reference || data.escrow_reference || data.id;
+    logger.info(`Escrow released: ${reference}`);
+    const transaction = await prisma.transaction.findFirst({
+      where: {
+        escrowId: reference,
+      },
+    });
+
+    if (transaction) {
+      await prisma.transaction.update({
+        where: { id: transaction.id },
+        data: {
+          escrowStatus: "released",
+          status: "COMPLETED",
+          squadStatus: data.status || "released",
+          completedAt: new Date(),
+        },
+      });
+    }
+
     return { processed: true, action: "escrow_released" };
   }
 
   async handleEscrowFailed(data) {
-    // TODO: Handle escrow failure
-    logger.error(`Escrow failed: ${data.reference}`);
+    const reference = data.reference || data.escrow_reference || data.id;
+    logger.error(`Escrow failed: ${reference}`);
+    const transaction = await prisma.transaction.findFirst({
+      where: {
+        escrowId: reference,
+      },
+    });
+
+    if (transaction) {
+      await prisma.transaction.update({
+        where: { id: transaction.id },
+        data: {
+          escrowStatus: "failed",
+          status: "FAILED",
+          squadStatus: data.status || "failed",
+          completedAt: new Date(),
+        },
+      });
+    }
+
     return { processed: true, action: "escrow_failed" };
   }
 }
