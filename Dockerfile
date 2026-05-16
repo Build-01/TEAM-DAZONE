@@ -1,20 +1,15 @@
-FROM node:20-alpine
+FROM node:18-alpine
 
-# Create app directory
 WORKDIR /app
 
-# Install dependencies
-COPY package.json package-lock.json* ./
+COPY package*.json ./
+COPY prisma ./prisma/
+
 RUN npm install --production
 
-# Copy app source
 COPY . .
-
-# Generate Prisma client
 RUN npx prisma generate
 
-# Expose port
-EXPOSE 3000
+EXPOSE 3001
 
-# Start the app
-CMD ["npm", "start"]
+CMD ["node", "src/index.js"]

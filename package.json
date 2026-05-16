@@ -33,7 +33,6 @@
     "joi": "^17.11.0",
     "jsonwebtoken": "^9.0.3",
     "redis": "^4.6.12",
-    "uuid": "^9.0.1",
     "winston": "^3.11.0"
   },
   "devDependencies": {
@@ -47,10 +46,16 @@
     "nodemo": "^1.0.0",
     "nodemon": "^3.0.2",
     "prisma": "^5.22.0",
+    "supertest": "^7.2.2",
     "ts-node": "^10.9.2",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "uuid": "^14.0.0"
   },
   "engines": {
     "node": ">=18.0.0"
-  }
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "type": "commonjs"
 }
