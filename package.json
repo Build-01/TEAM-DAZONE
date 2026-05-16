@@ -1,61 +1,26 @@
 {
-  "name": "sabiwork-backend",
+  "name": "sabiwork-frontend",
   "version": "1.0.0",
-  "description": "Sabiwork backend for AI-powered trust credit, pension automation, and informal economy onboarding",
-  "main": "src/index.js",
+  "private": true,
   "scripts": {
-    "dev": "nodemon src/index.js",
-    "start": "node src/index.js",
-    "build": "echo 'No build step for Node.js'",
-    "prisma:migrate": "prisma migrate dev",
-    "prisma:generate": "prisma generate",
-    "prisma:studio": "prisma studio",
-    "lint": "eslint src --fix",
-    "test": "jest"
+    "dev": "next dev --hostname 0.0.0.0",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
-  "keywords": [
-    "sabiwork",
-    "fintech",
-    "squad-api",
-    "pension",
-    "trust-credit",
-    "informal-economy"
-  ],
-  "author": "Sabiwork Team",
-  "license": "MIT",
   "dependencies": {
-    "@prisma/client": "^5.22.0",
-    "axios": "^1.16.1",
-    "bcryptjs": "^2.4.3",
-    "cors": "^2.8.6",
-    "dotenv": "^16.6.1",
-    "express": "^4.22.2",
-    "joi": "^17.11.0",
-    "jsonwebtoken": "^9.0.3",
-    "redis": "^4.6.12",
-    "winston": "^3.11.0"
+    "clsx": "^2.1.1",
+    "next": "14.2.5",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
   },
   "devDependencies": {
-    "@types/bcryptjs": "^2.4.6",
-    "@types/cors": "^2.8.19",
-    "@types/express": "^4.17.25",
-    "@types/jsonwebtoken": "^9.0.10",
-    "@types/node": "^20.19.41",
-    "eslint": "^8.56.0",
-    "jest": "^29.7.0",
-    "nodemo": "^1.0.0",
-    "nodemon": "^3.0.2",
-    "prisma": "^5.22.0",
-    "supertest": "^7.2.2",
-    "ts-node": "^10.9.2",
-    "typescript": "^6.0.3",
-    "uuid": "^14.0.0"
-  },
-  "engines": {
-    "node": ">=18.0.0"
-  },
-  "directories": {
-    "test": "tests"
-  },
-  "type": "commonjs"
+    "@types/node": "^20.14.3",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.36",
+    "tailwindcss": "^3.4.4",
+    "typescript": "^5.6.2"
+  }
 }

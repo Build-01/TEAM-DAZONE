@@ -1,48 +1,33 @@
-# SabiWork - Economic Identity Platform for Africa's Informal Economy
+# SabiWork Frontend
 
-##  The Problem We Solve
+This is the Next.js mobile-responsive frontend for the SabiWork platform.
 
-Africa's informal economy employs over 80% of the workforce, yet most workers lack formal records, credit access, pensions, insurance, and financial services. Because existing systems depend on traditional banking data, millions remain excluded, vulnerable to fraud, non-payment, and persistent poverty.
+## Setup
 
-##  Our Solution
+1. Open a terminal in `frontend`.
+2. Run `npm install`.
+3. Create a `.env.local` file with:
 
-An AI-powered platform that creates digital economic identities for informal workers. It onboards them, matches them to jobs, automates pension savings (10%), and builds verified trust credentials through an **Economic Identity Score™** based on:
-- Work activity & transaction consistency
-- Pension contributions
-- Community trust & repayment behavior
+```env
+NEXT_PUBLIC_API_BASE_URL=http://localhost:3001/api
+NEXT_PUBLIC_APP_NAME=SabiWork
+```
 
-This enables banks to offer credit safely, while workers gain financial visibility, secure payments, and long-term economic opportunities. **We provide trust credentials, not lending.**
-
-##  Squad APIs Used
-
-| API | Purpose |
-|-----|---------|
-| **Escrow transactions** | Secure gig payments |
-| **Instant worker payouts** | Immediate net payment after completion |
-| **Pension contribution transfers** | Auto-deduct 10% to pension |
-| **Payment webhooks** | Trigger trust score updates |
-| **Transaction reconciliation** | Match gig records with pension/payout logs |
-
-##  Tech Stack
-
-- **Backend:** Node.js, Express, Prisma, PostgreSQL
-- **Frontend:** Next.js, TailwindCSS, TypeScript
-- **AI:** Hugging Face, embedding-based matching
-- **Payments:** Squad API
-
-## Development Pillars Addressed
-
-| Pillar | Description |
-|--------|-------------|
-| **AI** | Skill extraction from photos, job matching, fraud detection, behavioral trust scoring |
-| **Use of Data** | Alternative data (gig completion, escrow history, savings, community endorsements) replaces traditional credit history |
-| **Financial Innovation** | Automated pension inclusion for informal workers + trust-based credit credentials |
-| **Squad API** | Escrow, instant payouts, automated pension transfers — Squad is our financial backbone |
-
-## Run Locally with Docker
-
-1. Copy `.env.example` to `.env` and update secrets.
-2. Build and start containers:
+4. Run the app:
 
 ```bash
-docker compose up --build
+npm run dev
+```
+
+The app will start on `http://localhost:3000` by default.
+
+## Features
+
+- Onboarding + role selection
+- Worker and client signup flows
+- Dashboard, gigs, portfolio, pension, transactions, posting gigs, applicants, contracts, trust credit, and AI portfolio builder screens
+- TailwindCSS styling with mobile-first layout
+- API integration with backend endpoints under `services/api.ts`
+- Offline gig caching and application queueing
+- Browser notifications for session and sync updates
+- Language context for English, Pidgin, Yoruba, Igbo, and Hausa
